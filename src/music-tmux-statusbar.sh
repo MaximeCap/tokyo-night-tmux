@@ -50,10 +50,10 @@ if command -v playerctl >/dev/null; then
     POSITION=0
   fi
 
-# nowplaying-cli
-elif command -v nowplaying-cli >/dev/null; then
+# media-control
+elif command -v media-control >/dev/null; then
   NPCLI_PROPERTIES=(title duration elapsedTime playbackRate isAlwaysLive)
-  mapfile -t NPCLI_OUTPUT < <(nowplaying-cli get "${NPCLI_PROPERTIES[@]}")
+  mapfile -t NPCLI_OUTPUT < <(media-control get -h "${NPCLI_PROPERTIES[@]}")
   declare -A NPCLI_VALUES
   for ((i = 0; i < ${#NPCLI_PROPERTIES[@]}; i++)); do
     # Handle null values
@@ -73,7 +73,7 @@ elif command -v nowplaying-cli >/dev/null; then
     DURATION=$(printf "%.0f" "${NPCLI_VALUES[duration]}")
     POSITION=$(printf "%.0f" "${NPCLI_VALUES[elapsedTime]}")
 
-    # fix for the bug in nowplaying-cli.
+    # fix for the bug in media-control.
     # See https://github.com/janoamaral/tokyo-night-tmux/issues/107#issuecomment-2576211115
     if [[ $OSTYPE == "darwin"* ]]; then
       if [ $STATUS == "playing" ]; then
